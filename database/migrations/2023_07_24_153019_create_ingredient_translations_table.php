@@ -12,8 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('ingredient_translations', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->increments('id');
+            $table->integer('ingredient_id')->unsigned();
+            $table->string('locale')->index();
+            $table->string('title');
+        
+            $table->unique(['ingredient_id', 'locale']);
         });
     }
 

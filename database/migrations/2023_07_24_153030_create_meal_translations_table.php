@@ -12,8 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('meal_translations', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->increments('id');
+            $table->integer('meal_id')->unsigned();
+            $table->string('locale')->index();
+            $table->string('title');
+            $table->string('description');
+        
+            $table->unique(['meal_id', 'locale']);
         });
     }
 

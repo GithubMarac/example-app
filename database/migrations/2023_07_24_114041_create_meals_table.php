@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('meals', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('description');
+            $table->foreignId('category_id');
             $table->softDeletes();
             $table->timestamps();
         });

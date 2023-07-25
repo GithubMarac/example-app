@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('meal_tag', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('meal_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('tag_id')->constrained()->cascadeOnDelete();
+        Schema::create('tag_translations', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('tag_id')->unsigned();
+            $table->string('locale')->index();
+            $table->string('title');
+        
+            $table->unique(['tag_id', 'locale']);
         });
     }
 
@@ -23,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('meal_tag');
+        Schema::dropIfExists('tag_translations');
     }
 };
