@@ -15,7 +15,8 @@ class Meal extends Model implements TranslatableContract
     public $translatedAttributes = ['title','description'];
 
     public function scopeFilter($query, array $filters){
-        if($filters[1] ?? false){
+
+        if($filters['category'] ?? false){
             $query->where('category_id', 'like', request('category'));
         }
     }
