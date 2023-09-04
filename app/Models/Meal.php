@@ -22,8 +22,7 @@ class Meal extends Model implements TranslatableContract
     public function scopeTags($query, $tags){
         if($tags){
             $tags = explode(',', $tags);
-            return $query->has('tags', '=', count($tags))
-            ->whereHas('tags', function($q) use($tags) {
+            return $query->whereHas('tags', function($q) use($tags) {
             $q->whereIn('tag_id', $tags);
         }, '=', count($tags));
         }else{
