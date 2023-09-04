@@ -14,9 +14,11 @@ class IngredientResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $translatedModel = $this->translateOrDefault($request->input('lang'));
+
         return [
             'id' => $this->id,
-            'title' => $this->title,
+            'title' => $translatedModel->title,
             'slug' => $this->slug
         ];
     }

@@ -11,8 +11,6 @@ class MealController extends Controller
 {
     public function index(Request $request)
     {
-
-        app()->setLocale($request->input('lang'));
         $diff_time = $request->input('diff_time');
 
         if($diff_time){
@@ -30,4 +28,5 @@ class MealController extends Controller
 
         return MealResource::collection($meals);
     }
+
 }

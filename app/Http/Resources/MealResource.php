@@ -18,11 +18,12 @@ class MealResource extends JsonResource
         $with = $request->input('with');
         $withArray = explode(',', $with);
         $diff_time = $request->input('diff_time');
+        $translatedModel = $this->translateOrDefault($request->input('lang'));
 
         return [
             'id' => $this->id,
-            'title' => $this->title,
-            'description' => $this->description,
+            'title' => $translatedModel->title,
+            'description' => $translatedModel->description,
             'category' => in_array('category', $withArray) ? ($this->category_id ? CategoryResource::collection(Category::where('id', 'like', $this->category_id)->get()) : []) : [],
             'tags' => in_array('tags', $withArray) ? TagResource::collection($this->tags) : [],
             'ingredients' => in_array('ingredients', $withArray) ? IngredientResource::collection($this->ingredients) : [],
@@ -31,6 +32,10 @@ class MealResource extends JsonResource
     }
 
     private function status($diff_time, $meal): string{
+        if($diff_time == null){
+            return 'created';
+        }
+        
         switch ($diff_time) {
             case $diff_time < $meal->deleted_at:
                 return 'deleted';
