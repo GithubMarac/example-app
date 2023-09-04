@@ -13,21 +13,20 @@ class MealController extends Controller
     {
 
         app()->setLocale($request->input('lang'));
+        $diff_time = $request->input('diff_time');
 
-        $tags = explode(',', $request->input('tags'));
-        $with = $request->input('with');
+        if($diff_time){
+            $meals = Meal::withTrashed()
+            ->tags($request->input('tags'))
+            ->category($request->input('category'))
+            ->paginate($request->input('per_page'));
+        }else{
+            $meals = Meal::query()
+            ->tags($request->input('tags'))
+            ->category($request->input('category'))
+            ->paginate($request->input('per_page'));
+        }
 
-        //
-        //Nisam stigao ovo zavrsiti, valjda ce biti dovoljno sto sam napisao do sada.....
-        //
-        
-        $meals = Meal::whereHas('tags', function ($query) use($tags) {
-            $query->whereIn('tag_id', $tags);
-        })->filter([
-                        'category' => $request->input('category'),
-                        'diffTime' => $request->input('diffTime')])
-                    ->paginate($request->input('per_page'));
-        
 
         return MealResource::collection($meals);
     }

@@ -15,16 +15,29 @@ class MealResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $with = $request->input('with');
+        $withArray = explode(',', $with);
+        $diff_time = $request->input('diff_time');
+
         return [
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
-            'category' => CategoryResource::collection(Category::where('id', 'like', $this->category_id)->get()),
-            'tags' => TagResource::collection($this->tags),
-            'ingredients' => IngredientResource::collection($this->ingredients),
-            'status' => 'created',
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'category' => in_array('category', $withArray) ? ($this->category_id ? CategoryResource::collection(Category::where('id', 'like', $this->category_id)->get()) : []) : [],
+            'tags' => in_array('tags', $withArray) ? TagResource::collection($this->tags) : [],
+            'ingredients' => in_array('ingredients', $withArray) ? IngredientResource::collection($this->ingredients) : [],
+            'status' => $this->status($diff_time, $this),
         ];
+    }
+
+    private function status($diff_time, $meal): string{
+        switch ($diff_time) {
+            case $diff_time < $meal->deleted_at:
+                return 'deleted';
+            case $diff_time < $meal->updated_at && $meal->updated_at > $meal->created_at:
+                return 'modified';
+            default:
+                return 'created';
+        }
     }
 }
