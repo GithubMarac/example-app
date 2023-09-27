@@ -14,8 +14,12 @@ class MealCollection extends ResourceCollection
      */
     public function toArray(Request $request): array
     {
-        return [
-            'data' => $this->collection,
-        ];
+        return parent::toArray($request);
+    }
+
+    public function paginationInformation($request, $paginated, $default)
+    {
+        unset($default['links']);
+        return $default;
     }
 }
