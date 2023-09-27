@@ -24,9 +24,9 @@ class MealResource extends JsonResource
             'id' => $this->id,
             'title' => $translatedModel->title,
             'description' => $translatedModel->description,
-            'category' => in_array('category', $withArray) ? ($this->category_id ? CategoryResource::collection(Category::where('id', 'like', $this->category_id)->get()) : []) : [],
-            'tags' => in_array('tags', $withArray) ? TagResource::collection($this->tags) : [],
-            'ingredients' => in_array('ingredients', $withArray) ? IngredientResource::collection($this->ingredients) : [],
+            'category' => $this->when(in_array('category', $withArray), CategoryResource::collection(Category::where('id', 'like', $this->category_id ?? '0')->get())),
+            'tags' => $this->when(in_array('tags', $withArray), TagResource::collection($this->tags)),
+            'ingredients' => $this->when(in_array('ingredients', $withArray), IngredientResource::collection($this->ingredients)),
             'status' => $this->status($diff_time, $this),
         ];
     }
