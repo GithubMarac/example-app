@@ -15,7 +15,7 @@ class CustomPaginator extends LengthAwarePaginator
     {
         return [
             'data' => $this->items->toArray(),
-            'pagination' => [
+            [
                 'currentPage' => $this->currentPage(),
                 'totalItems' => $this->total(),
                 'itemsPerPage'     => $this->perPage(),

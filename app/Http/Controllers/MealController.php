@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\MealResource;
+use App\Http\Resources\MealCollection;
 use Illuminate\Http\Request;
 use App\Models\Meal;
 use Illuminate\Support\Facades\App;
@@ -34,7 +35,7 @@ class MealController extends Controller
         }
 
 
-        return MealResource::collection($meals);
+        return new MealCollection($meals);
     }
 
 }
